@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 
-#Find images from a directory, rotate them, and save in jpeg format
+# Find images from a directory, rotate them, and save in jpeg format
 
 imagedir = os.listdir("/home/[student]/supplier-data/images")
 images = []
