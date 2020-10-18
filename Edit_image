@@ -1,0 +1,15 @@
+import os
+from PIL import Image
+
+#Find images from a directory, rotate them, and save in jpeg format
+
+imagedir = os.listdir("/home/[student]/supplier-data/images")
+images = []
+for b in imagedir:
+    if not b.startswith('.'):
+        images.append(b)
+    else:
+        continue
+for i in images:
+    with Image.open("/home/[student]/supplier-data/images/" + i) as im:
+        im.convert("RGB").resize((600, 400)).save("/home/[student]/supplier-data/images/" + i.strip(".tiff") + ".jpeg")
