@@ -1,0 +1,22 @@
+import os
+import linecache
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Paragraph, Spacer, Table
+from reportlab.lib.styles import getSampleStyleSheet
+from datetime import date
+
+# Given a text file, compiles specified values into a dictionary and generates a table in a new pdf file.
+
+path = "/home/[student]/supplier-data/descriptions/"
+filelist = os.listdir(path)
+today = date.today()
+report = SimpleDocTemplate("/tmp/processed.pdf")
+styles = getSampleStyleSheet()
+report_title = Paragraph("Processed update on " + today.strftime("%B %d, %Y"), styles["h1"])
+pdflist = []
+for file in filelist:
+    pdfdict = {"name:" : linecache.getline("{}".format(path + file), 1).rstrip('\n'), "weight:" : (linecache.getline("{}".format(path + file), 2)), "" : ""}
+    for k, v in pdfdict.items():
+        pdflist.append([k,v])
+report_table = Table(data=pdflist)
+report.build([report_title, report_table])
