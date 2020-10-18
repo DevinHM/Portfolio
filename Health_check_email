@@ -1,0 +1,50 @@
+import psutil
+import socket
+import smtplib
+import mimetypes
+from email.message import EmailMessage
+
+# Detects various system health points and generates and email if any become unhealthy
+
+mail_server = smtplib.SMTP('localhost')
+message = EmailMessage()
+sender = "automation@example.com"
+recipient = "[student]@example.com"
+body = "Please check your system and resolve the issue as soon as possible."
+cpu = psutil.cpu_percent(interval=1)
+disk = psutil.disk_usage('/')
+mem = psutil.virtual_memory()
+network = socket.gethostbyname('localhost')
+THRESHOLD = 500 * 1024 * 1024
+if cpu >= 80.0:
+    message["From"] = sender
+    message["To"] = recipient
+    message["Subject"] = "Error - CPU usage is over 80%"
+    message.set_content(body)
+    mail_server.send_message(message)
+else:
+    pass
+if disk[3] >= 80.0:
+    message["From"] = sender
+    message["To"] = recipient
+    message["Subject"] = "Error - Available disk space is less than 20%"
+    message.set_content(body)
+    mail_server.send_message(message)
+else:
+    pass
+if mem.available <= THRESHOLD:
+    message["From"] = sender
+    message["To"] = recipient
+    message["Subject"] = "Error - Available memory is less than 500MB"
+    message.set_content(body)
+    mail_server.send_message(message)
+else:
+    pass
+try:
+    network
+except socket.gaierror:
+    message["From"] = sender
+    message["To"] = recipient
+    message["Subject"] = "Error - localhost cannot be resolved to 127.0.0.1"
+    message.set_content(body)
+    mail_server.send_message(message)
