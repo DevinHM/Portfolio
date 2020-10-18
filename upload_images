@@ -1,0 +1,16 @@
+import os
+import requests
+
+# Find images in a directory and upload them to the specified url
+
+url = "http://localhost/upload/"
+list = os.listdir("/home/[student]/supplier-data/images")
+uploadimages = []
+for b in list:
+    if b.endswith(".jpeg") and not b.startswith('.'):
+        uploadimages.append(b)
+    else:
+        continue
+for file in uploadimages:
+    with open("/home/[student]/supplier-data/images/" + file, 'rb') as opened:
+        r = requests.post(url, files={'file' : opened})
